@@ -19,13 +19,6 @@ describe Oystercard do
     end
   end
 
-  describe "#deduct" do
-    it "should reduce the balance by 2" do
-      subject.top_up(10)
-      expect(subject.deduct(2)).to eq 8
-    end
-  end
-
   describe "#in_journey" do
     it { is_expected.not_to be_in_journey }
   end
@@ -47,6 +40,12 @@ describe Oystercard do
       subject.touch_in
       subject.touch_out
       expect(subject).not_to be_in_journey
+    end
+
+    it "should deduct money on touch out" do
+      subject.top_up(Oystercard::MIN_FARE)
+      subject.touch_in
+      expect { subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MIN_FARE)
     end
   end
 
