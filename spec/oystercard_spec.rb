@@ -2,6 +2,9 @@ require 'oystercard'
 
 describe Oystercard do
   let (:station) { double :station }
+  let (:station_2) { double :station }
+  let(:journey){ {from: station, to: station_2} }
+
 
   describe "#balance" do
     it "should report intial balance as 0" do
@@ -48,20 +51,32 @@ describe Oystercard do
       subject.top_up(Oystercard::MIN_FARE)
       subject.touch_in(station)
     }
-    
+
     it "should be able to touch out" do
-      subject.touch_out
+      subject.touch_out(station)
       expect(subject).not_to be_in_journey
     end
 
     it "should deduct money on touch out" do
-      expect { subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MIN_FARE)
+      expect { subject.touch_out(station) }.to change{ subject.balance }.by(-Oystercard::MIN_FARE)
     end
 
     it "should clear the entry station" do
-      subject.touch_out
+      subject.touch_out(station)
       expect(subject.entry_station).to be_nil
     end
+  end
+
+  it "should start with an empty journey history" do
+    expect(subject.journey_history).to be_empty
+  end
+
+
+  it "should remember the journey history" do
+    subject.top_up(Oystercard::MIN_FARE)
+    subject.touch_in(station)
+    subject.touch_out(station_2)
+    expect(subject.journey_history).to include journey
   end
 
 end
