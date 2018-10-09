@@ -2,7 +2,7 @@ require 'oystercard'
 
 describe Oystercard do
   let (:station) { double :station }
-  let (:station_2) { double :station }
+  let (:station_2) { double :station_2 }
   let(:journey){ {from: station, to: station_2} }
 
   describe "#balance" do
@@ -80,6 +80,21 @@ describe Oystercard do
 
     it "should remember the entry station" do
       expect(subject.journey_history.first.exit_station).to eq station_2
+    end
+
+    it "should store a journey even if no exit station when a new journey starts" do
+      subject = Oystercard.new
+      subject.top_up(10)
+      subject.touch_in(station)
+      subject.touch_in(station_2)
+      expect(subject.journey_history.last.entry_station).to eq station
+    end
+
+    it "should store a journey even if there is no entry station" do
+      subject = Oystercard.new
+      subject.top_up(10)
+      subject.touch_out(station)
+      expect(subject.journey_history.last.exit_station).to eq station
     end
   end
 
