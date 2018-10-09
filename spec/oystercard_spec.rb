@@ -1,11 +1,9 @@
 require 'oystercard'
 
-
 describe Oystercard do
   let (:station) { double :station }
   let (:station_2) { double :station }
   let(:journey){ {from: station, to: station_2} }
-
 
   describe "#balance" do
     it "should report intial balance as 0" do
@@ -61,11 +59,6 @@ describe Oystercard do
     it "should deduct money on touch out" do
       expect { subject.touch_out(station) }.to change{ subject.balance }.by(-Oystercard::MIN_FARE)
     end
-
-    it "should clear the entry station" do
-      subject.touch_out(station)
-      expect(subject.entry_station).to be_nil
-    end
   end
 
   it "should start with an empty journey history" do
@@ -91,15 +84,23 @@ describe Oystercard do
   end
 
   describe "#fare" do
-    it "should return the minimum fare" do
+    before {
       subject.top_up(10)
+    }
+    it "should return the minimum fare" do
       subject.touch_in(station)
       subject.touch_out(station)
       expect(subject.fare).to eq Oystercard::MIN_FARE
     end
+
     it "should charge a penalty fare if no entry station" do
-      subject.top_up(10)
       subject.touch_out(station)
+      expect(subject.fare).to eq Oystercard::PENALTY_FARE
+    end
+
+    it "should charge a penalty fare if there is no exit station" do
+      subject.touch_in(station)
+      subject.touch_in(station)
       expect(subject.fare).to eq Oystercard::PENALTY_FARE
     end
   end
