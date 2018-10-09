@@ -71,12 +71,23 @@ describe Oystercard do
     expect(subject.journey_history).to be_empty
   end
 
+  describe "#journey_history" do
+    before {
+      subject.top_up(Oystercard::MIN_FARE)
+      subject.touch_in(station)
+      subject.touch_out(station_2)
+    }
+    it "should store instaces of Journey" do
+      expect(subject.journey_history.first).to be_an_instance_of Journey
+    end
+    it "should remember the entry station" do
+      expect(subject.journey_history.first.entry_station).to eq station
+    end
 
-  it "should remember the journey history" do
-    subject.top_up(Oystercard::MIN_FARE)
-    subject.touch_in(station)
-    subject.touch_out(station_2)
-    expect(subject.journey_history).to include journey
+    it "should remember the entry station" do
+      expect(subject.journey_history.first.exit_station).to eq station_2
+    end
   end
+
 
 end
