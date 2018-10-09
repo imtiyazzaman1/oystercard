@@ -39,11 +39,11 @@ describe Oystercard do
       expect{ subject.touch_in(station) }.to raise_error "Insufficient balance"
     end
 
-    it "should remember the entry station" do
+    it "should create a new instance of journey" do
       subject.top_up(Oystercard::MIN_FARE)
-      subject.touch_in(station)
-      expect(subject.entry_station).to eq station
+      expect(subject.touch_in(station)).to be_an_instance_of(Journey)
     end
+
   end
 
   describe "#touch_out" do
