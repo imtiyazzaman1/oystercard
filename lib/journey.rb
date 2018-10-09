@@ -6,8 +6,16 @@ class Journey
     @entry_station = entry_station
   end
 
-  def end(station)
+  def end(station = "")
     @exit_station = station
   end
 
+  def fare
+    return Oystercard::PENALTY_FARE unless complete?
+    Oystercard::MIN_FARE if complete?
+  end
+
+  def complete?
+    !@entry_station.empty? && !@exit_station.empty?
+  end
 end
