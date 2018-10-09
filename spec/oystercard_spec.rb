@@ -1,5 +1,6 @@
 require 'oystercard'
 
+
 describe Oystercard do
   let (:station) { double :station }
   let (:station_2) { double :station }
@@ -89,5 +90,17 @@ describe Oystercard do
     end
   end
 
-
+  describe "#fare" do
+    it "should return the minimum fare" do
+      subject.top_up(10)
+      subject.touch_in(station)
+      subject.touch_out(station)
+      expect(subject.fare).to eq Oystercard::MIN_FARE
+    end
+    it "should charge a penalty fare if no entry station" do
+      subject.top_up(10)
+      subject.touch_out(station)
+      expect(subject.fare).to eq Oystercard::PENALTY_FARE
+    end
+  end
 end

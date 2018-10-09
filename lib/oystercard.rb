@@ -3,6 +3,7 @@ class Oystercard
 
   LIMIT = 90
   MIN_FARE = 1
+  PENALTY_FARE = 6
 
   def initialize
     @balance = 0
@@ -29,8 +30,20 @@ class Oystercard
   def touch_out(station)
     deduct(MIN_FARE)
     @in_journey = false
-    @journey.end(station)
+    @journey.end(station) if !@journey.nil?
+    if @journey.nil?
+      @journey = Journey.new
+      @journey.end(station)
+    end
     @journey_history << @journey
+  end
+
+  def fare
+    if @journey_history.last.entry_station == ""
+      PENALTY_FARE
+    else
+      MIN_FARE
+    end 
   end
 
   private
