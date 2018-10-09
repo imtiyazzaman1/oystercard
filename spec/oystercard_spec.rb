@@ -83,25 +83,4 @@ describe Oystercard do
     end
   end
 
-  describe "#fare" do
-    before {
-      subject.top_up(10)
-    }
-    it "should return the minimum fare" do
-      subject.touch_in(station)
-      subject.touch_out(station)
-      expect(subject.fare).to eq Oystercard::MIN_FARE
-    end
-
-    it "should charge a penalty fare if no entry station" do
-      subject.touch_out(station)
-      expect(subject.fare).to eq Oystercard::PENALTY_FARE
-    end
-
-    it "should charge a penalty fare if there is no exit station" do
-      subject.touch_in(station)
-      subject.touch_in(station)
-      expect(subject.fare).to eq Oystercard::PENALTY_FARE
-    end
-  end
 end

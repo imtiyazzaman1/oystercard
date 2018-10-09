@@ -45,16 +45,6 @@ class Oystercard
     @journey = nil
   end
 
-  def fare
-    if @journey_history.last.entry_station == ""
-      PENALTY_FARE
-    elsif @journey_history.last.exit_station.nil?
-      PENALTY_FARE
-    else
-      MIN_FARE
-    end
-  end
-
   private
   def deduct(amount)
     @balance -= amount
