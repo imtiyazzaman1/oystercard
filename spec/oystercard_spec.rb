@@ -37,12 +37,6 @@ describe Oystercard do
     it "should not be able to touch in if balance is below the minimum fare" do
       expect{ subject.touch_in(station) }.to raise_error "Insufficient balance"
     end
-
-    it "should create a new instance of journey" do
-      subject.top_up(Oystercard::MIN_FARE)
-      expect(subject.touch_in(station)).to be_an_instance_of(Journey)
-    end
-
   end
 
   describe "#touch_out" do

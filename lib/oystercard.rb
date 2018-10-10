@@ -1,3 +1,5 @@
+require 'journey'
+
 class Oystercard
   attr_reader :balance, :journey_history
 
@@ -25,7 +27,8 @@ class Oystercard
     @in_journey = true
 
     @journey_history << @journey if !@journey.nil?
-    @journey = Journey.new(station) if @journey.nil?
+    @journey = Journey.new
+    @journey.start(station)
   end
 
   def touch_out(station)
