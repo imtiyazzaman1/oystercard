@@ -1,5 +1,3 @@
-require 'journey'
-
 class Oystercard
   attr_reader :balance, :journey_history
 
