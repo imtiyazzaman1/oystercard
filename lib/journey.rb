@@ -6,11 +6,11 @@ class Journey
     @entry_station
   end
 
-  def start(station = "")
+  def start(station = nil)
     @entry_station = station
   end
 
-  def end(station = "")
+  def end(station = nil)
     @exit_station = station
   end
 
@@ -20,6 +20,6 @@ class Journey
   end
 
   def complete?
-    !@entry_station.empty? && !@exit_station.empty?
+    !@entry_station.nil? && !@exit_station.nil?
   end
 end
